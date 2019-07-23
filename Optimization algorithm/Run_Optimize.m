@@ -14,7 +14,7 @@ global Pv; %Pivot
 
 % Initialization of the constans
 
-load Poblacion;% Initial population 
+%load Poblacion;% Initial population 
 R=100;% Cylinder radius
 H=200;% Cylinder height
 Angle_joint= 100; %Angle max joint
@@ -25,12 +25,12 @@ Penal=400;%
 FitnessFunction = @Objective_function; % Function handle to the fitness function
 numberOfVariables = 4; % Number of decision variables
 PopulationSize_Data = 100;
-CrossoverFraction_Data= 0.15;
-Max_Generations=1500;
+CrossoverFraction_Data= 0.5;
+Max_Generations=100;
 Max_StallGenLimit=750;
-InitialPopulation_Data=Poblacion;
-lb = [R;50;50;H]; % Lower bound %%L1,L2,L3,L4
-ub = [2*R;400;100;3*H]; % Upper bound
+%InitialPopulation_Data=Poblacion;
+lb = [R;150;45;H]; % Lower bound %%L1,L2,L3,L4
+ub = [2*R;300;60;2*H]; % Upper bound
 A = []; % No linear inequality constraints
 b = []; % No linear inequality constraints
 Aeq = []; % No linear equality constraints
@@ -39,11 +39,11 @@ beq = []; % No linear equality constraints
 options = gaoptimset;
 options = gaoptimset(options,'PopulationSize' ,PopulationSize_Data);
 options = gaoptimset(options,'CrossoverFraction' ,CrossoverFraction_Data);
-options = gaoptimset(options,'InitialPopulation' ,InitialPopulation_Data);
+%options = gaoptimset(options,'InitialPopulation' ,InitialPopulation_Data);
 options = gaoptimset(options,'Generations',Max_Generations);
 options = gaoptimset(options,'StallGenLimit',Max_StallGenLimit);
-%options = gaoptimset(options,'Display', 'iter');
-%options = gaoptimset(options,'PlotFcns',{  @gaplotbestindiv  @gaplotexpectation @gaplotgenealogy @gaplotrange @gaplotscorediversity @gaplotscores @gaplotselection @gaplotstopping});
+options = gaoptimset(options,'Display', 'iter');
+options = gaoptimset(options,'PlotFcns',{  @gaplotbestindiv  @gaplotexpectation @gaplotgenealogy @gaplotrange @gaplotscorediversity @gaplotscores @gaplotselection @gaplotstopping});
 options = gaoptimset(options,'PlotFcns',{  @gaplotdistance @gaplotselection @gaplotgenealogy @gaplotstopping @gaplotmaxconstr @gaplotbestindiv });
 [x,Fval,exitFlag,Output,population,scores] = ga(FitnessFunction,numberOfVariables,A,b,Aeq,beq,lb,ub,[],options)
 

@@ -52,12 +52,18 @@ for h=(0):Resolution_cloud:T
             q3=q(3);    %Position for actuator 3  
             
 %Check Restrictions 
-if (sum(isnan(q))>0) && (max(q) < Angle_joint
+if (sum(isnan(q))>0) && (max(q) < Angle_joint)
     V1=pi*R^2+H;                      % Cylinder volume
     V2=(pi*((Rb+Pv)^2+Rm^2+((Rb+Pv)*Rm))*z)/3;  % Truncated cone volume 
-    F= (round(V1)+ round(V2);         % Value to minimize 
+    F= (round(V1)+ round(V2))         % Value to minimize 
 end
+
 %Draw Robot 
+% if (Pv + Junta == Rb)
+%     V1=pi*R^2+H;                      % Cylinder volume
+%     V2=(pi*((Rb+Pv)^2+Rm^2+((Rb+Pv)*Rm))*z)/3;  % Truncated cone volume 
+%     F= (round(V1)+ round(V2))*100;         % Value to minimize 
+% end
 if (R_Draw == 1)
                     figure(1); clf;
                     a(i)=x;
@@ -76,7 +82,7 @@ end
 
  V1=pi*R^2+H;                      % Cylinder volume
     V2=(pi*((Rb+Pv)^2+Rm^2+((Rb+Pv)*Rm))*z)/3;  % Truncated cone volume 
-    F= (round(V1)+ round(V2);         % Value to minimize 
+    F= (round(V1)+ round(V2));         % Value to minimize 
 end
 
             
