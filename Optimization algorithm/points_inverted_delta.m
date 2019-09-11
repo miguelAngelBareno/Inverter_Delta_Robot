@@ -12,14 +12,20 @@ function str = points_inverted_delta(Robot,x,y,z)
                               %Posiciones de los puntos de la Base del
                               %robot 
     end
-    
+     
     %mobile platform
     for i=1:3
+        
         str.B(i,:) = [x + Robot.Rm*cos(theta(i)), y + Robot.Rm*sin(theta(i)), z];
                               %Posiciones de los puntos de la plataforma
                               %movil del robot 
+        
+        end
+        for i=1:3
+        alpha(i) = atan2(str.A(i,2) - str.B(i,2), str.A(i,1) - str.B(i,1));
+                              %Angulo generado entre el brazo del robot y
+                              %el eje x
     end
-    
     %shadow
     for i=1: 3
         str.shadow =( norm(str.A(i,:)-str.B(i,:)))-str.B(i,3);
@@ -27,15 +33,11 @@ function str = points_inverted_delta(Robot,x,y,z)
                               % brazo del robot sobre la base
     end
     
-    for i=1:3
-        alpha(i) = atan2(str.A(i,2) - str.B(i,2), str.A(i,1) - str.B(i,1));
-                              %Angulo generado entre el brazo del robot y
-                              %el eje x
-    end
+   
     
     %solving equations
     if z==0
-        z=z+(1*exp(-100))
+        z=z+(1*exp(-100));
     end
     
     m = (2*str.shadow)/(2*z);    %Despejando el valor de b
@@ -51,10 +53,10 @@ function str = points_inverted_delta(Robot,x,y,z)
                                %en su componente z
     a = abs(a);
 
-    b = sqrt(Robot.L^2 - a^2)
+    b = sqrt(Robot.L^2 - a^2);
     
-    d= a-str.shadow
-    c=sqrt(Robot.L^2-d^2)
+    d= a-str.shadow;
+    c=sqrt(Robot.L^2-d^2);
     
     %elbow
     for i=1:3

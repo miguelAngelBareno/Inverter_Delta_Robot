@@ -1,11 +1,10 @@
-function F=Objective_function(x)
-
+function F=Objective_function(chr)
 % chromosomes 
 
-Rb=x(1); % Fixed base radius 
-L=x(2);  % Length of links
-Rm=x(3); % Movile base radius
-Pv=x(4); %Pivot
+Rb=chr(1); % Fixed base radius 
+L =chr(2);  % Length of links
+Rm=chr(3); % Movile base radius
+Pv=chr(4); %Pivot
 
 %  Declaration global variables 
 
@@ -48,7 +47,7 @@ for h=(0):Resolution_cloud:T
             
 % Calculation of the inverse kinematics          
 
-            q=Reverse_kinematic(Robot,x,y,z);% Calculation of the articular coordinate
+            q=Reverse_kinematic_2(Robot,x,y,z);% Calculation of the articular coordinate
             q1=q(1);    %Position for actuator 1
             q2=q(2);    %Position for actuator 2
             q3=q(3);    %Position for actuator 3  
@@ -56,22 +55,37 @@ for h=(0):Resolution_cloud:T
 %Check Restrictions 
 
 %minimo angulo 
-Angle_joint_Min=acos(((2*Robot.L)^2-Robot.Pv^2)/(2*Robot.L)^2)
+Angle_joint_Min=acos(((2*Robot.L)^2-Robot.Pv^2)/(2*Robot.L)^2)*180/pi;
 
 if (sum(isnan(q))>0) && (max(q) < Angle_joint_Max) && (min(q) > Angle_joint_Min)
     for i=1:3
         %base del triangulo isoseles 
-        b=sqrt(2*Robot.L^2(1-cos(q(i)));
+        b=sqrt(2*Robot.L^2*(1-cos(q(i))));
+        
+        V1=pi*R^2+H;                      % Cylinder volume
+V2=(pi*((Rb+Pv)^2+Rm^2+((Rb+Pv)*Rm))*z)/3;  % Truncated cone volume 
+F= (round(V1)+ round(V2))+Penalty_fee ;       % Value to minimize 
         if (b>Robot.Pv)%Posible punto de coolicion
             Penalty_fee=(Robot.Pv/b)*2;
+            
+            V1=pi*R^2+H;                      % Cylinder volume
+V2=(pi*((Rb+Pv)^2+Rm^2+((Rb+Pv)*Rm))*z)/3;  % Truncated cone volume 
+F= (round(V1)+ round(V2))+Penalty_fee;        % Value to minimize 
         else
             Penalty_fee= Penalty_fee+(Penal/2);
+            
+            V1=pi*R^2+H;                      % Cylinder volume
+V2=(pi*((Rb+Pv)^2+Rm^2+((Rb+Pv)*Rm))*z)/3;  % Truncated cone volume 
+F= (round(V1)+ round(V2))+Penalty_fee ;       % Value to minimize 
         end
     end
 else
     Pealty_fee=Penalty_fee+Penal;
-end
     
+    V1=pi*R^2+H;                      % Cylinder volume
+V2=(pi*((Rb+Pv)^2+Rm^2+((Rb+Pv)*Rm))*z)/3;  % Truncated cone volume 
+F= (round(V1)+ round(V2))+Penalty_fee;        % Value to minimize 
+end
 end
 %Draw Robot 
 if (R_Draw == 1)
@@ -91,7 +105,7 @@ end
 
 V1=pi*R^2+H;                      % Cylinder volume
 V2=(pi*((Rb+Pv)^2+Rm^2+((Rb+Pv)*Rm))*z)/3;  % Truncated cone volume 
-F= (round(V1)+ round(V2))+Penalty_fee ;        % Value to minimize 
+F= (round(V1)+ round(V2))+Penalty_fee;      % Value to minimize 
 end
 
             
